@@ -141,9 +141,8 @@ export default function OrderForm() {
     if (!validate()) return;
     if (step === 5) {
       trackInitiateCheckout(29.99);
-      // Save lead to Google Sheets immediately (before payment)
-      await saveOrderToSheet();
-      await fetchClientSecret();
+      // Run both in parallel to save time
+      await Promise.all([saveOrderToSheet(), fetchClientSecret()]);
     }
     if (step < TOTAL_STEPS) {
       setStep((s) => s + 1);
