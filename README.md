@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MelodyForYou
 
-## Getting Started
+A personalized song e-commerce store. Customers fill out a 6-step form, pay via Stripe ($34.99), and receive a custom studio-quality song within 24–48 hours.
 
-First, run the development server:
+Built with Next.js 14 · Tailwind CSS · Stripe · Google Sheets · Meta Pixel
+
+## Quick Start
 
 ```bash
+npm install
+cp .env.example .env.local
+# Fill in your keys in .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and fill in:
 
-## Learn More
+| Variable | Description |
+|----------|-------------|
+| `STRIPE_SECRET_KEY` | Stripe secret key (sk_live_...) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key (pk_live_...) |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
+| `GOOGLE_SHEET_ID` | Google Sheets document ID |
+| `GOOGLE_SERVICE_ACCOUNT_EMAIL` | GCP service account email |
+| `GOOGLE_PRIVATE_KEY` | GCP private key |
+| `NEXT_PUBLIC_META_PIXEL_ID` | Meta Pixel ID |
+| `META_ACCESS_TOKEN` | Meta Conversions API token |
+| `NEXT_PUBLIC_APP_URL` | Your deployment URL |
 
-To learn more about Next.js, take a look at the following resources:
+## Stripe Webhook (Local Testing)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Install Stripe CLI
+npm install -g stripe
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Forward events to local server
+stripe listen --forward-to localhost:3000/api/webhook
+```
 
-## Deploy on Vercel
+Copy the webhook signing secret to `STRIPE_WEBHOOK_SECRET`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Google Sheets Setup
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Create Google Sheet `songOrdersV2`
+2. Create service account in Google Cloud Console
+3. Share sheet with service account email (Editor)
+4. Set credentials in `.env.local`
+
+## Deploy to Vercel
+
+1. Push to GitHub
+2. Import in [vercel.com](https://vercel.com)
+3. Add all environment variables
+4. Add Stripe webhook endpoint: `https://yoursite.vercel.app/api/webhook`
+
+For full documentation see [CLAUDE.md](./CLAUDE.md).
