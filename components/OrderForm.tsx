@@ -124,10 +124,25 @@ export default function OrderForm() {
     }
   }, [order]);
 
+  const saveOrderToSheet = async () => {
+    try {
+      await fetch("/api/save-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderData: order }),
+      });
+    } catch (err) {
+      console.error("Failed to save order:", err);
+      // Don't block — sheet logging failure shouldn't stop checkout
+    }
+  };
+
   const handleNext = async () => {
     if (!validate()) return;
     if (step === 5) {
       trackInitiateCheckout(29.99);
+      // Save lead to Google Sheets immediately (before payment)
+      await saveOrderToSheet();
       await fetchClientSecret();
     }
     if (step < TOTAL_STEPS) {
