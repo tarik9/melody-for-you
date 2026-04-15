@@ -12,7 +12,7 @@ const TESTIMONIALS = [
     short: "Thirty years of memories in three minutes",
     text: "We celebrated our 30th anniversary last month and I wanted something different. I gave the song during dinner and she absolutely lost it. The song captured everything I wrote about our life together — our first apartment, our kids, our dog Max. I honestly didn't expect it to be this good.",
     image: "/photos/1757039375__1757039372326-fb_img_1724502883125__original.avif",
-    // Warm golden-hour tones → amber card
+    facePosition: "center 20%",
     cardBg: "bg-amber-50",
     verified: true,
   },
@@ -24,7 +24,7 @@ const TESTIMONIALS = [
     short: "My favorite birthday gift ever",
     text: "My husband surprised me with this for my birthday and I was NOT expecting it to cry my face off! The song talked about how we met at that coffee shop and our inside jokes. I've listened to it probably 100 times already.",
     image: "/photos/1757889937__1757889927404-img_7195__original.avif",
-    // Blue sky / resort pool → light sky-blue card
+    facePosition: "center 75%",  // face is in bottom half, sky/umbrellas at top
     cardBg: "bg-sky-50",
     verified: true,
   },
@@ -36,7 +36,7 @@ const TESTIMONIALS = [
     short: "Sounds like something you'd hear on the radio",
     text: "Got this as a birthday present for my dad's 60th. Professional quality, beautifully sung. We've played it at least 20 times. It perfectly captured his entire life story in a 4-minute song.",
     image: "/photos/1758025917__1758025904102-img_20240512_1420432__original.avif",
-    // Teal dress / warm porch tones → light teal card
+    facePosition: "center 15%",  // full body, face near top
     cardBg: "bg-teal-50",
     verified: true,
   },
@@ -48,7 +48,7 @@ const TESTIMONIALS = [
     short: "The most personal gift I've ever received",
     text: "After 30 years I thought I'd given every possible gift. Then my daughter ordered this for Father's Day and it changed everything. The song was everything I love — our family memories, my favorite fishing spots, even our dog's name. I actually cried.",
     image: "/photos/1769515984__1769515961554-img_0912__original.avif",
-    // Red theater seats → soft rose card
+    facePosition: "center 30%",
     cardBg: "bg-rose-50",
     verified: true,
   },
@@ -60,7 +60,7 @@ const TESTIMONIALS = [
     short: "Something I'll treasure forever",
     text: "My daughter made this for Father's Day and it hit different. The artists captured exactly what she wrote about our relationship from when she was little – it felt authentic and deeply personal.",
     image: "/photos/iimg.avif",
-    // Outdoor, red shirt, sunny street → warm orange card
+    facePosition: "center 25%",
     cardBg: "bg-orange-50",
     verified: true,
   },
@@ -72,7 +72,7 @@ const TESTIMONIALS = [
     short: "We both ended up crying",
     text: "Ordered this for my husband's 40th birthday and we both ended up crying. Twenty-five years of marriage and this song captured it beautifully. We played it at our anniversary dinner with the whole family. A gift that keeps giving every time we play it.",
     image: "/photos/img.avif",
-    // Warm indoor, floral shirts → light purple card
+    facePosition: "center 20%",
     cardBg: "bg-purple-50",
     verified: true,
   },
@@ -84,7 +84,7 @@ const TESTIMONIALS = [
     short: "Made us both cry on the beach",
     text: "I surprised my sister with this song for her 40th and she couldn't believe how personal it was. We grew up by the ocean and hearing our whole childhood captured in a song — that spot, those summers, our late mum — absolutely wrecked us both in the best way.",
     image: "/photos/immg.avif",
-    // Sandy beach, overcast sky → soft gray-blue card
+    facePosition: "center 35%",
     cardBg: "bg-slate-50",
     verified: true,
   },
@@ -163,7 +163,8 @@ export default function Testimonials() {
                   src={t.image}
                   alt={t.name}
                   fill
-                  className="object-cover object-top"
+                  className="object-cover"
+                  style={{ objectPosition: t.facePosition }}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
