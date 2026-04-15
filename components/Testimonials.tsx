@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 const TESTIMONIALS = [
   {
@@ -10,7 +11,9 @@ const TESTIMONIALS = [
     rating: 5,
     short: "Thirty years of memories in three minutes",
     text: "We celebrated our 30th anniversary last month and I wanted something different. I gave the song during dinner and she absolutely lost it. The song captured everything I wrote about our life together — our first apartment, our kids, our dog Max. I honestly didn't expect it to be this good.",
-    image: "/testimonials/richard.jpg",
+    image: "/photos/1757039375__1757039372326-fb_img_1724502883125__original.avif",
+    // Warm golden-hour tones → amber card
+    cardBg: "bg-amber-50",
     verified: true,
   },
   {
@@ -20,7 +23,9 @@ const TESTIMONIALS = [
     rating: 5,
     short: "My favorite birthday gift ever",
     text: "My husband surprised me with this for my birthday and I was NOT expecting it to cry my face off! The song talked about how we met at that coffee shop and our inside jokes. I've listened to it probably 100 times already.",
-    image: "/testimonials/samantha.jpg",
+    image: "/photos/1757889937__1757889927404-img_7195__original.avif",
+    // Blue sky / resort pool → light sky-blue card
+    cardBg: "bg-sky-50",
     verified: true,
   },
   {
@@ -30,7 +35,9 @@ const TESTIMONIALS = [
     rating: 5,
     short: "Sounds like something you'd hear on the radio",
     text: "Got this as a birthday present for my dad's 60th. Professional quality, beautifully sung. We've played it at least 20 times. It perfectly captured his entire life story in a 4-minute song.",
-    image: "/testimonials/michelle.jpg",
+    image: "/photos/1758025917__1758025904102-img_20240512_1420432__original.avif",
+    // Teal dress / warm porch tones → light teal card
+    cardBg: "bg-teal-50",
     verified: true,
   },
   {
@@ -40,7 +47,9 @@ const TESTIMONIALS = [
     rating: 5,
     short: "The most personal gift I've ever received",
     text: "After 30 years I thought I'd given every possible gift. Then my daughter ordered this for Father's Day and it changed everything. The song was everything I love — our family memories, my favorite fishing spots, even our dog's name. I actually cried.",
-    image: "/testimonials/sally.jpg",
+    image: "/photos/1769515984__1769515961554-img_0912__original.avif",
+    // Red theater seats → soft rose card
+    cardBg: "bg-rose-50",
     verified: true,
   },
   {
@@ -50,7 +59,9 @@ const TESTIMONIALS = [
     rating: 5,
     short: "Something I'll treasure forever",
     text: "My daughter made this for Father's Day and it hit different. The artists captured exactly what she wrote about our relationship from when she was little – it felt authentic and deeply personal.",
-    image: "/testimonials/steve.jpg",
+    image: "/photos/iimg.avif",
+    // Outdoor, red shirt, sunny street → warm orange card
+    cardBg: "bg-orange-50",
     verified: true,
   },
   {
@@ -60,7 +71,21 @@ const TESTIMONIALS = [
     rating: 5,
     short: "We both ended up crying",
     text: "Ordered this for my husband's 40th birthday and we both ended up crying. Twenty-five years of marriage and this song captured it beautifully. We played it at our anniversary dinner with the whole family. A gift that keeps giving every time we play it.",
-    image: "/testimonials/marcus.jpg",
+    image: "/photos/img.avif",
+    // Warm indoor, floral shirts → light purple card
+    cardBg: "bg-purple-50",
+    verified: true,
+  },
+  {
+    id: 7,
+    name: "Lisa & Karen S.",
+    location: "Gold Coast, Australia",
+    rating: 5,
+    short: "Made us both cry on the beach",
+    text: "I surprised my sister with this song for her 40th and she couldn't believe how personal it was. We grew up by the ocean and hearing our whole childhood captured in a song — that spot, those summers, our late mum — absolutely wrecked us both in the best way.",
+    image: "/photos/immg.avif",
+    // Sandy beach, overcast sky → soft gray-blue card
+    cardBg: "bg-slate-50",
     verified: true,
   },
 ];
@@ -115,7 +140,7 @@ export default function Testimonials() {
           {TESTIMONIALS.map((t) => (
             <div
               key={t.id}
-              className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200"
+              className={`${t.cardBg} rounded-2xl p-5 shadow-sm border border-white hover:shadow-md transition-shadow duration-200`}
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
@@ -132,22 +157,15 @@ export default function Testimonials() {
                 </div>
               </div>
 
-              {/* Photo placeholder with gradient */}
-              <div
-                className="w-full h-36 rounded-xl mb-3 overflow-hidden"
-                style={{
-                  background: `linear-gradient(135deg, ${
-                    ["#7C3AED20", "#D97706", "#059669", "#DC2626", "#2563EB", "#7C3AED"][t.id - 1]
-                  }30, ${
-                    ["#A78BFA", "#FCD34D", "#6EE7B7", "#FCA5A5", "#93C5FD", "#C4B5FD"][t.id - 1]
-                  }40)`,
-                }}
-              >
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-4xl">
-                    {["👫", "👩", "👨", "👫", "👨‍👧", "👫"][t.id - 1]}
-                  </span>
-                </div>
+              {/* Real customer photo */}
+              <div className="w-full h-44 rounded-xl mb-3 overflow-hidden relative">
+                <Image
+                  src={t.image}
+                  alt={t.name}
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                />
               </div>
 
               <p className="font-semibold text-gray-800 text-sm mb-1">{t.short}</p>
