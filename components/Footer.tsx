@@ -19,7 +19,7 @@ export default function Footer() {
             </svg>
           </a>
           <a
-            href="https://instagram.com/melodyforyou"
+            href="https://www.instagram.com/melodyforyou.store/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-[#7C3AED] transition-colors"

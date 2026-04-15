@@ -10,7 +10,7 @@ export default function HeroSection() {
     <section
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{
-        background: "linear-gradient(135deg, #4C1D95 0%, #6D28D9 40%, #7C3AED 70%, #8B5CF6 100%)",
+        background: "linear-gradient(135deg, #1E0A4A 0%, #3B0F8C 25%, #5B21B6 55%, #7C3AED 80%, #9333EA 100%)",
       }}
     >
       {/* Background musical elements */}
@@ -28,7 +28,7 @@ export default function HeroSection() {
       <div
         className="absolute inset-0 opacity-15"
         style={{
-          backgroundImage: `radial-gradient(ellipse at 80% 50%, rgba(255,255,255,0.15) 0%, transparent 70%)`,
+          backgroundImage: `radial-gradient(ellipse at 70% 40%, rgba(167,139,250,0.25) 0%, transparent 55%), radial-gradient(ellipse at 20% 80%, rgba(109,40,217,0.4) 0%, transparent 50%)`,
         }}
       />
 
