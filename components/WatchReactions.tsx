@@ -1,19 +1,83 @@
-export default function WatchReactions() {
-  const videos = [
-    {
-      id: 1,
-      label: "I made her fall in love with me all over again ❤️",
-      thumbnail: "bg-gradient-to-br from-gray-800 to-gray-900",
-      icon: "🎵",
-    },
-    {
-      id: 2,
-      label: "She cried the whole time 😭",
-      thumbnail: "bg-gradient-to-br from-purple-800 to-indigo-900",
-      icon: "🎤",
-    },
-  ];
+"use client";
 
+import { useRef, useState } from "react";
+
+interface VideoItem {
+  src: string;
+  label: string;
+}
+
+const videos: VideoItem[] = [
+  {
+    src: "/Videos/video4.mp4",
+    label: "I made her fall in love with me all over again ❤️",
+  },
+  {
+    src: "/Videos/video3.mp4",
+    label: "She cried the whole time 😭",
+  },
+];
+
+function VideoCard({ src, label }: VideoItem) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  const toggle = () => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play();
+      setPlaying(true);
+    } else {
+      v.pause();
+      setPlaying(false);
+    }
+  };
+
+  return (
+    <div
+      className="relative rounded-3xl overflow-hidden aspect-[9/16] max-h-80 sm:max-h-96 bg-black cursor-pointer group"
+      onClick={toggle}
+    >
+      <video
+        ref={videoRef}
+        src={src}
+        className="absolute inset-0 w-full h-full object-cover"
+        playsInline
+        loop
+        onEnded={() => setPlaying(false)}
+      />
+
+      {/* Play/pause overlay — hidden while playing, shown on hover or when paused */}
+      <div
+        className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
+          playing ? "opacity-0 group-hover:opacity-100" : "opacity-100"
+        }`}
+        style={{ background: playing ? "rgba(0,0,0,0.15)" : "rgba(0,0,0,0.35)" }}
+      >
+        <div className="w-14 h-14 bg-white/25 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/40 transition-colors">
+          {playing ? (
+            <svg viewBox="0 0 24 24" fill="white" className="w-6 h-6">
+              <rect x="6" y="4" width="4" height="16" rx="1" />
+              <rect x="14" y="4" width="4" height="16" rx="1" />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7 ml-1">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          )}
+        </div>
+      </div>
+
+      {/* Caption */}
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 pointer-events-none">
+        <p className="text-white text-sm font-medium leading-snug">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+export default function WatchReactions() {
   return (
     <section className="py-20 bg-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
@@ -26,24 +90,7 @@ export default function WatchReactions() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
           {videos.map((v) => (
-            <div
-              key={v.id}
-              className={`relative rounded-3xl overflow-hidden aspect-[9/16] max-h-80 sm:max-h-96 ${v.thumbnail} cursor-pointer group`}
-            >
-              {/* Play button overlay */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                <div className="text-5xl">{v.icon}</div>
-                <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
-                  <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7 ml-0.5">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-              {/* Caption */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                <p className="text-white text-sm font-medium leading-snug">{v.label}</p>
-              </div>
-            </div>
+            <VideoCard key={v.src} src={v.src} label={v.label} />
           ))}
         </div>
       </div>
