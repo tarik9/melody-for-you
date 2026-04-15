@@ -21,6 +21,19 @@ const videos: VideoItem[] = [
 function VideoCard({ src, label }: VideoItem) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // Seek to first frame so the video shows a thumbnail instead of black
+  const handleLoadedMetadata = () => {
+    const v = videoRef.current;
+    if (v) {
+      v.currentTime = 0.1;
+    }
+  };
+
+  const handleSeeked = () => {
+    setLoaded(true);
+  };
 
   const toggle = () => {
     const v = videoRef.current;
@@ -36,7 +49,7 @@ function VideoCard({ src, label }: VideoItem) {
 
   return (
     <div
-      className="relative rounded-3xl overflow-hidden aspect-[9/16] max-h-80 sm:max-h-96 bg-black cursor-pointer group"
+      className="relative rounded-3xl overflow-hidden aspect-[9/16] max-h-80 sm:max-h-96 bg-gray-900 cursor-pointer group"
       onClick={toggle}
     >
       <video
@@ -45,29 +58,44 @@ function VideoCard({ src, label }: VideoItem) {
         className="absolute inset-0 w-full h-full object-cover"
         playsInline
         loop
+        preload="auto"
+        onLoadedMetadata={handleLoadedMetadata}
+        onSeeked={handleSeeked}
         onEnded={() => setPlaying(false)}
       />
 
-      {/* Play/pause overlay — hidden while playing, shown on hover or when paused */}
-      <div
-        className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
-          playing ? "opacity-0 group-hover:opacity-100" : "opacity-100"
-        }`}
-        style={{ background: playing ? "rgba(0,0,0,0.15)" : "rgba(0,0,0,0.35)" }}
-      >
-        <div className="w-14 h-14 bg-white/25 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/40 transition-colors">
-          {playing ? (
-            <svg viewBox="0 0 24 24" fill="white" className="w-6 h-6">
-              <rect x="6" y="4" width="4" height="16" rx="1" />
-              <rect x="14" y="4" width="4" height="16" rx="1" />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7 ml-1">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-          )}
+      {/* Loading spinner — shown until first frame is ready */}
+      {!loaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+          <svg className="animate-spin w-8 h-8 text-white/50" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" className="opacity-25" />
+            <path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor" className="opacity-75" />
+          </svg>
         </div>
-      </div>
+      )}
+
+      {/* Play / pause overlay */}
+      {loaded && (
+        <div
+          className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
+            playing ? "opacity-0 group-hover:opacity-100" : "opacity-100"
+          }`}
+          style={{ background: playing ? "rgba(0,0,0,0.1)" : "rgba(0,0,0,0.25)" }}
+        >
+          <div className="w-14 h-14 bg-white/25 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-white/40 transition-colors">
+            {playing ? (
+              <svg viewBox="0 0 24 24" fill="white" className="w-6 h-6">
+                <rect x="6" y="4" width="4" height="16" rx="1" />
+                <rect x="14" y="4" width="4" height="16" rx="1" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="white" className="w-7 h-7 ml-1">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Caption */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 pointer-events-none">
