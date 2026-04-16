@@ -12,11 +12,14 @@ function SuccessContent() {
   const email = params.get("email") || "";
   const recipient = params.get("recipient") || "";
   const occasion = params.get("occasion") || "";
+  // Stripe appends payment_intent to the return_url automatically
+  const paymentIntentId = params.get("payment_intent") || undefined;
 
   useEffect(() => {
     // Fire client-side purchase pixel events
     trackPurchase(29.99, "USD");
-    trackRedditPurchase(29.99, "USD", email);
+    trackRedditPurchase(29.99, "USD", email, paymentIntentId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

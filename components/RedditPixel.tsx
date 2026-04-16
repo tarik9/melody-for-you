@@ -47,14 +47,24 @@ export function trackRedditEvent(eventName: string, data?: Record<string, unknow
   }
 }
 
-// Lead: re-init with email for better attribution, then fire Lead
+// Lead: re-init with email, include a unique conversionId
 export function trackRedditLead(email?: string) {
   initWithUser(email);
-  trackRedditEvent("Lead");
+  const conversionId = `lead_${email || "anon"}_${Date.now()}`;
+  trackRedditEvent("Lead", { conversionId });
 }
 
-// Purchase: re-init with email, then fire Purchase
-export function trackRedditPurchase(value: number, currency = "USD", email?: string) {
+// Purchase: re-init with email, use Stripe paymentIntentId as conversionId
+export function trackRedditPurchase(
+  value: number,
+  currency = "USD",
+  email?: string,
+  conversionId?: string
+) {
   initWithUser(email);
-  trackRedditEvent("Purchase", { value, currency });
+  trackRedditEvent("Purchase", {
+    value,
+    currency,
+    conversionId: conversionId || `purchase_${Date.now()}`,
+  });
 }
