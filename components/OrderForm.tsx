@@ -15,6 +15,7 @@ import {
   OCCASIONS,
 } from "@/lib/types";
 import { trackInitiateCheckout } from "@/components/MetaPixel";
+import { trackRedditLead } from "@/components/RedditPixel";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
@@ -141,6 +142,7 @@ export default function OrderForm() {
     if (!validate()) return;
     if (step === 5) {
       trackInitiateCheckout(29.99);
+      trackRedditLead();
       // Run both in parallel to save time
       await Promise.all([saveOrderToSheet(), fetchClientSecret()]);
     }

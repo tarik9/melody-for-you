@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/Header";
 import { trackPurchase } from "@/components/MetaPixel";
+import { trackRedditPurchase } from "@/components/RedditPixel";
 
 function SuccessContent() {
   const params = useSearchParams();
@@ -13,8 +14,9 @@ function SuccessContent() {
   const occasion = params.get("occasion") || "";
 
   useEffect(() => {
-    // Fire client-side purchase pixel event
+    // Fire client-side purchase pixel events
     trackPurchase(29.99, "USD");
+    trackRedditPurchase(29.99, "USD");
   }, []);
 
   return (
