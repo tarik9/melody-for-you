@@ -20,10 +20,25 @@ export default function RedditPixel() {
   );
 }
 
-// Helper — call from any client component
+type Rdt = (...args: unknown[]) => void;
+
+function getRdt(): Rdt | undefined {
+  if (typeof window === "undefined") return undefined;
+  return (window as unknown as { rdt?: Rdt }).rdt;
+}
+
+// Re-init with user identity for advanced matching, then fire the event.
+// Reddit hashes the email automatically — pass it as plain text.
+function initWithUser(email?: string) {
+  const rdt = getRdt();
+  if (!rdt) return;
+  if (email) {
+    rdt("init", PIXEL_ID, { email });
+  }
+}
+
 export function trackRedditEvent(eventName: string, data?: Record<string, unknown>) {
-  if (typeof window === "undefined") return;
-  const rdt = (window as unknown as { rdt?: (...args: unknown[]) => void }).rdt;
+  const rdt = getRdt();
   if (!rdt) return;
   if (data) {
     rdt("track", eventName, data);
@@ -32,6 +47,14 @@ export function trackRedditEvent(eventName: string, data?: Record<string, unknow
   }
 }
 
-export const trackRedditLead = () => trackRedditEvent("Lead");
-export const trackRedditPurchase = (value: number, currency = "USD") =>
+// Lead: re-init with email for better attribution, then fire Lead
+export function trackRedditLead(email?: string) {
+  initWithUser(email);
+  trackRedditEvent("Lead");
+}
+
+// Purchase: re-init with email, then fire Purchase
+export function trackRedditPurchase(value: number, currency = "USD", email?: string) {
+  initWithUser(email);
   trackRedditEvent("Purchase", { value, currency });
+}

@@ -16,7 +16,7 @@ function SuccessContent() {
   useEffect(() => {
     // Fire client-side purchase pixel events
     trackPurchase(29.99, "USD");
-    trackRedditPurchase(29.99, "USD");
+    trackRedditPurchase(29.99, "USD", email);
   }, []);
 
   return (

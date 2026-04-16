@@ -142,7 +142,7 @@ export default function OrderForm() {
     if (!validate()) return;
     if (step === 5) {
       trackInitiateCheckout(29.99);
-      trackRedditLead();
+      trackRedditLead(order.email);
       // Run both in parallel to save time
       await Promise.all([saveOrderToSheet(), fetchClientSecret()]);
     }
