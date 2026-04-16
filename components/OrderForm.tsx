@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { loadStripe } from "@stripe/stripe-js";
+import type { Stripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import StepIndicator from "@/components/form/StepIndicator";
 import StepCard from "@/components/form/StepCard";
@@ -16,10 +17,6 @@ import {
 } from "@/lib/types";
 import { trackInitiateCheckout } from "@/components/MetaPixel";
 import { trackRedditLead } from "@/components/RedditPixel";
-
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
-);
 
 const TOTAL_STEPS = 6;
 
@@ -72,6 +69,16 @@ export default function OrderForm() {
   const [errors, setErrors] = useState<Partial<OrderData>>({});
   const [clientSecret, setClientSecret] = useState("");
   const [isLoadingSecret, setIsLoadingSecret] = useState(false);
+  // Stripe is loaded lazily — only when user reaches step 5
+  const stripePromiseRef = useRef<Promise<Stripe | null> | null>(null);
+  const getStripePromise = () => {
+    if (!stripePromiseRef.current) {
+      stripePromiseRef.current = loadStripe(
+        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
+      );
+    }
+    return stripePromiseRef.current;
+  };
 
   const scrollToForm = () => {
     const el = document.getElementById("order-form");
@@ -143,6 +150,7 @@ export default function OrderForm() {
     if (step === 5) {
       trackInitiateCheckout(29.99);
       trackRedditLead(order.email);
+      getStripePromise(); // pre-warm Stripe.js while user fills email
       // Run both in parallel to save time
       await Promise.all([saveOrderToSheet(), fetchClientSecret()]);
     }
@@ -391,7 +399,7 @@ export default function OrderForm() {
               </div>
             ) : clientSecret ? (
               <Elements
-                stripe={stripePromise}
+                stripe={getStripePromise()}
                 options={{
                   clientSecret,
                   appearance: {

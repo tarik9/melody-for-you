@@ -4,6 +4,7 @@ import MetaPixel from "@/components/MetaPixel";
 import RedditPixel from "@/components/RedditPixel";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://melodyforyou.store"),
   title: "MelodyForYou – A Personalized Song Made From Your Story",
   description:
     "Turn your memories into a studio-quality song. Professional musicians craft your personal story into music, delivered in 24 hours.",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
     title: "MelodyForYou – A Personalized Song Made From Your Story",
     description: "Turn your memories into a studio-quality song, delivered in 24 hours.",
     type: "website",
+    siteName: "MelodyForYou",
   },
 };
 

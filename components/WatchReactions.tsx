@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 
 interface VideoItem {
   src: string;
@@ -24,10 +25,12 @@ const videos: VideoItem[] = [
 function VideoCard({ src, poster, label }: VideoItem) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [started, setStarted] = useState(false);
 
   const toggle = () => {
     const v = videoRef.current;
     if (!v) return;
+    setStarted(true);
     if (v.paused) {
       v.play();
       setPlaying(true);
@@ -42,11 +45,22 @@ function VideoCard({ src, poster, label }: VideoItem) {
       className="relative rounded-3xl overflow-hidden aspect-[9/16] max-h-80 sm:max-h-96 bg-black cursor-pointer group"
       onClick={toggle}
     >
+      {/* Poster via Next.js Image — lazy loaded, auto-converted to WebP/AVIF */}
+      {!started && (
+        <Image
+          src={poster}
+          alt={label}
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 100vw, 50vw"
+          loading="lazy"
+        />
+      )}
+
       <video
         ref={videoRef}
         src={src}
-        poster={poster}
-        className="absolute inset-0 w-full h-full object-cover"
+        className={`absolute inset-0 w-full h-full object-cover ${started ? "opacity-100" : "opacity-0"}`}
         playsInline
         loop
         preload="none"

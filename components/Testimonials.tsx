@@ -166,6 +166,8 @@ export default function Testimonials() {
                   className="object-cover"
                   style={{ objectPosition: t.facePosition }}
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  priority={t.id <= 2}
+                  loading={t.id <= 2 ? "eager" : "lazy"}
                 />
               </div>
 
