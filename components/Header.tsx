@@ -9,7 +9,7 @@ export default function Header() {
 
   const handleCTA = () => {
     if (isHome) {
-      const el = document.getElementById("order-form");
+      const el = document.getElementById("sample-songs");
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
@@ -39,7 +39,7 @@ export default function Header() {
           </button>
         ) : (
           <Link
-            href="/#order-form"
+            href="/#sample-songs"
             className="bg-[#D97706] hover:bg-[#B45309] text-white font-semibold px-4 py-2 rounded-full text-sm transition-all duration-200 shadow-sm hover:shadow-md"
           >
             Listen to Our Songs

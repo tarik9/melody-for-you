@@ -82,7 +82,7 @@ export default function SampleSongs() {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <section className="py-20 bg-white">
+    <section id="sample-songs" className="py-20 bg-white">
       {/* Hidden audio element */}
       <audio
         ref={audioRef}
