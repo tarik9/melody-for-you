@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { appendOrderToSheet } from "@/lib/googleSheets";
 import { sendPurchaseEvent } from "@/lib/metaConversionsApi";
+import { sendTikTokPurchaseEvent } from "@/lib/tiktokEventsApi";
 import { OrderData } from "@/lib/types";
 import Stripe from "stripe";
 
@@ -52,16 +53,27 @@ export async function POST(req: NextRequest) {
     // 1. Append to Google Sheets
     await appendOrderToSheet(orderData, paymentIntent.id, paymentIntent.amount);
 
-    // 2. Send Meta Conversions API server-side Purchase event
-    await sendPurchaseEvent({
-      email: orderData.email,
-      value: paymentIntent.amount / 100,
-      currency: paymentIntent.currency.toUpperCase(),
-      orderId: paymentIntent.id,
-      clientIp,
-      userAgent,
-      eventSourceUrl: `${process.env.NEXT_PUBLIC_APP_URL}/create`,
-    });
+    // 2. Send server-side Purchase events (Meta CAPI + TikTok Events API)
+    await Promise.all([
+      sendPurchaseEvent({
+        email: orderData.email,
+        value: paymentIntent.amount / 100,
+        currency: paymentIntent.currency.toUpperCase(),
+        orderId: paymentIntent.id,
+        clientIp,
+        userAgent,
+        eventSourceUrl: `${process.env.NEXT_PUBLIC_APP_URL}/create`,
+      }),
+      sendTikTokPurchaseEvent({
+        email: orderData.email,
+        value: paymentIntent.amount / 100,
+        currency: paymentIntent.currency.toUpperCase(),
+        orderId: paymentIntent.id,
+        clientIp,
+        userAgent,
+        eventSourceUrl: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
+      }),
+    ]);
 
     console.log(`Order processed successfully: ${paymentIntent.id}`);
   }
