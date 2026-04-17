@@ -17,6 +17,7 @@ import {
 } from "@/lib/types";
 import { trackInitiateCheckout } from "@/components/MetaPixel";
 import { trackRedditLead } from "@/components/RedditPixel";
+import { trackTikTokInitiateCheckout, identifyTikTokUser } from "@/components/TikTokPixel";
 
 const TOTAL_STEPS = 6;
 
@@ -150,6 +151,8 @@ export default function OrderForm() {
     if (step === 5) {
       trackInitiateCheckout(29.99);
       trackRedditLead(order.email);
+      identifyTikTokUser(order.email);
+      trackTikTokInitiateCheckout(29.99);
       getStripePromise(); // pre-warm Stripe.js while user fills email
       // Run both in parallel to save time
       await Promise.all([saveOrderToSheet(), fetchClientSecret()]);

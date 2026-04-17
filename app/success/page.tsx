@@ -6,6 +6,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import { trackPurchase } from "@/components/MetaPixel";
 import { trackRedditPurchase } from "@/components/RedditPixel";
+import { trackTikTokPurchase } from "@/components/TikTokPixel";
 
 function SuccessContent() {
   const params = useSearchParams();
@@ -19,6 +20,7 @@ function SuccessContent() {
     // Fire client-side purchase pixel events
     trackPurchase(29.99, "USD");
     trackRedditPurchase(29.99, "USD", email, paymentIntentId);
+    trackTikTokPurchase(29.99, "USD", paymentIntentId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

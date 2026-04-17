@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import MetaPixel from "@/components/MetaPixel";
 import RedditPixel from "@/components/RedditPixel";
+import TikTokPixel from "@/components/TikTokPixel";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://melodyforyou.store"),
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className="min-h-screen antialiased">
         <MetaPixel />
         <RedditPixel />
+        <TikTokPixel />
         {children}
       </body>
     </html>
