@@ -32,5 +32,5 @@ export const OCCASIONS = [
   "Other",
 ];
 
-export const SONG_PRICE = 29.99;
-export const SONG_PRICE_CENTS = 2999;
+export const SONG_PRICE = 19.99;
+export const SONG_PRICE_CENTS = 1999;

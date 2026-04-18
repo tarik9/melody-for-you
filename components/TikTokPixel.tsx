@@ -24,7 +24,7 @@ export default function TikTokPixel() {
             };
             ttq.load('${PIXEL_ID}');
             ttq.page();
-            ttq.track('ViewContent', { content_name: 'Custom Song', content_type: 'product', value: 29.99, currency: 'USD' });
+            ttq.track('ViewContent', { content_name: 'Custom Song', content_type: 'product', value: 19.99, currency: 'USD' });
           }(window,document,'ttq');
         `,
       }}
@@ -56,7 +56,7 @@ export function trackTikTokViewContent() {
   trackTikTokEvent("ViewContent", {
     content_name: "Custom Song",
     content_type: "product",
-    value: 29.99,
+    value: 19.99,
     currency: "USD",
   });
 }
@@ -66,7 +66,7 @@ export function trackTikTokAddToCart() {
   trackTikTokEvent("AddToCart", {
     content_name: "Custom Song",
     content_type: "product",
-    value: 29.99,
+    value: 19.99,
     currency: "USD",
   });
 }

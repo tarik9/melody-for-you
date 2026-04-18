@@ -18,9 +18,9 @@ function SuccessContent() {
 
   useEffect(() => {
     // Fire client-side purchase pixel events
-    trackPurchase(29.99, "USD");
-    trackRedditPurchase(29.99, "USD", email, paymentIntentId);
-    trackTikTokPurchase(29.99, "USD", paymentIntentId);
+    trackPurchase(19.99, "USD");
+    trackRedditPurchase(19.99, "USD", email, paymentIntentId);
+    trackTikTokPurchase(19.99, "USD", paymentIntentId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
