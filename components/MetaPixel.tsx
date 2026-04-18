@@ -17,17 +17,25 @@ export function trackEvent(event: string, params?: Record<string, unknown>) {
   }
 }
 
+const CONTENT_ID = "custom-song";
+
 export function trackInitiateCheckout(value: number, currency = "USD") {
-  trackEvent("InitiateCheckout", { value, currency, content_name: "Custom Song" });
+  trackEvent("InitiateCheckout", { value, currency, content_ids: [CONTENT_ID], content_name: "Custom Song", content_type: "product" });
 }
 
 export function trackPurchase(value: number, currency = "USD", orderId?: string) {
   trackEvent("Purchase", {
     value,
     currency,
+    content_ids: [CONTENT_ID],
     content_name: "Custom Song",
+    content_type: "product",
     order_id: orderId,
   });
+}
+
+export function trackViewContent(value: number, currency = "USD") {
+  trackEvent("ViewContent", { value, currency, content_ids: [CONTENT_ID], content_name: "Custom Song", content_type: "product" });
 }
 
 export default function MetaPixel() {

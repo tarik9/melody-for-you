@@ -1,6 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
+import { trackViewContent } from "@/components/MetaPixel";
+import { SONG_PRICE } from "@/lib/types";
+
 export default function HeroSection() {
+  useEffect(() => {
+    trackViewContent(SONG_PRICE);
+  }, []);
   const scrollToForm = () => {
     const el = document.getElementById("order-form");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
