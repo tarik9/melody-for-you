@@ -6,10 +6,8 @@ import { SONG_PRICE } from "@/lib/types";
 const PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID || "D7HB6EJC77U8DEPHGQS0";
 
 const PRODUCT = {
-  content_ids: ["custom-song"],
-  content_name: "Custom Song",
-  content_type: "product",
   contents: [{ content_id: "custom-song", content_name: "Custom Song", quantity: 1, price: SONG_PRICE }],
+  content_type: "product",
 };
 
 export default function TikTokPixel() {
