@@ -24,6 +24,7 @@ export default function TikTokPixel() {
             };
             ttq.load('${PIXEL_ID}');
             ttq.page();
+            ttq.track('ViewContent', { content_name: 'Custom Song', content_type: 'product', value: 29.99, currency: 'USD' });
           }(window,document,'ttq');
         `,
       }}
@@ -50,6 +51,26 @@ export function identifyTikTokUser(email: string) {
   getTtq()?.identify({ email });
 }
 
+// ViewContent — user lands on page and sees the product (fired on load)
+export function trackTikTokViewContent() {
+  trackTikTokEvent("ViewContent", {
+    content_name: "Custom Song",
+    content_type: "product",
+    value: 29.99,
+    currency: "USD",
+  });
+}
+
+// AddToCart — user completes step 1 (selected a style = expressed intent)
+export function trackTikTokAddToCart() {
+  trackTikTokEvent("AddToCart", {
+    content_name: "Custom Song",
+    content_type: "product",
+    value: 29.99,
+    currency: "USD",
+  });
+}
+
 export function trackTikTokInitiateCheckout(value: number, currency = "USD") {
   trackTikTokEvent("InitiateCheckout", {
     value,
@@ -59,12 +80,15 @@ export function trackTikTokInitiateCheckout(value: number, currency = "USD") {
   });
 }
 
+// Purchase (standard name) + CompletePayment (TikTok-specific) both fired for full coverage
 export function trackTikTokPurchase(value: number, currency = "USD", orderId?: string) {
-  trackTikTokEvent("CompletePayment", {
+  const params = {
     value,
     currency,
     content_name: "Custom Song",
     content_type: "product",
     order_id: orderId,
-  });
+  };
+  trackTikTokEvent("Purchase", params);
+  trackTikTokEvent("CompletePayment", params);
 }

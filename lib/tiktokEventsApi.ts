@@ -40,7 +40,7 @@ export async function sendTikTokPurchaseEvent(params: TikTokPurchaseParams) {
     partner_name: "NextJS",
     data: [
       {
-        event: "CompletePayment",
+        event: "Purchase",
         event_time: eventTime,
         event_id: orderId, // deduplication key
         user,

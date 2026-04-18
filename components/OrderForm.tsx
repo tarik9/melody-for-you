@@ -17,7 +17,7 @@ import {
 } from "@/lib/types";
 import { trackInitiateCheckout } from "@/components/MetaPixel";
 import { trackRedditLead } from "@/components/RedditPixel";
-import { trackTikTokInitiateCheckout, identifyTikTokUser } from "@/components/TikTokPixel";
+import { trackTikTokInitiateCheckout, trackTikTokAddToCart, identifyTikTokUser } from "@/components/TikTokPixel";
 
 const TOTAL_STEPS = 6;
 
@@ -148,6 +148,10 @@ export default function OrderForm() {
 
   const handleNext = async () => {
     if (!validate()) return;
+    // AddToCart: user finishes step 1 (selected style = clear purchase intent)
+    if (step === 1) {
+      trackTikTokAddToCart();
+    }
     if (step === 5) {
       trackInitiateCheckout(29.99);
       trackRedditLead(order.email);
