@@ -25,7 +25,6 @@ export default function TikTokPixel() {
             };
             ttq.load('${PIXEL_ID}');
             ttq.page();
-            ttq.track('ViewContent', { content_id: 'custom-song', content_name: 'Custom Song', content_type: 'product', value: ${SONG_PRICE}, currency: 'USD' });
           }(window,document,'ttq');
         `,
       }}

@@ -18,10 +18,22 @@ function SuccessContent() {
   const paymentIntentId = params.get("payment_intent") || undefined;
 
   useEffect(() => {
-    // Fire client-side purchase pixel events
     trackPurchase(SONG_PRICE, "USD");
     trackRedditPurchase(SONG_PRICE, "USD", email, paymentIntentId);
-    trackTikTokPurchase(SONG_PRICE, "USD", paymentIntentId);
+
+    // TikTok pixel uses lazyOnload — retry until window.ttq is ready
+    const fireTikTok = () => trackTikTokPurchase(SONG_PRICE, "USD", paymentIntentId);
+    if ((window as unknown as { ttq?: unknown }).ttq) {
+      fireTikTok();
+    } else {
+      const interval = setInterval(() => {
+        if ((window as unknown as { ttq?: unknown }).ttq) {
+          clearInterval(interval);
+          fireTikTok();
+        }
+      }, 100);
+      setTimeout(() => clearInterval(interval), 10000); // give up after 10s
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

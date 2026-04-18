@@ -2,11 +2,24 @@
 
 import { useEffect } from "react";
 import { trackViewContent } from "@/components/MetaPixel";
+import { trackTikTokViewContent } from "@/components/TikTokPixel";
 import { SONG_PRICE } from "@/lib/types";
 
 export default function HeroSection() {
   useEffect(() => {
     trackViewContent(SONG_PRICE);
+    // TikTok pixel uses lazyOnload — retry until ready
+    if ((window as unknown as { ttq?: unknown }).ttq) {
+      trackTikTokViewContent();
+    } else {
+      const interval = setInterval(() => {
+        if ((window as unknown as { ttq?: unknown }).ttq) {
+          clearInterval(interval);
+          trackTikTokViewContent();
+        }
+      }, 100);
+      setTimeout(() => clearInterval(interval), 10000);
+    }
   }, []);
   const scrollToForm = () => {
     const el = document.getElementById("order-form");
