@@ -51,6 +51,7 @@ export async function sendTikTokPurchaseEvent(params: TikTokPurchaseParams) {
           value: value.toFixed(2),
           currency: currency.toUpperCase(),
           order_id: orderId,
+          content_id: "custom-song",
           content_name: "Custom Song",
           content_type: "product",
         },
