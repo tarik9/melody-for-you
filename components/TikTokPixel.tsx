@@ -5,6 +5,13 @@ import { SONG_PRICE } from "@/lib/types";
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID || "D7HB6EJC77U8DEPHGQS0";
 
+const PRODUCT = {
+  content_ids: ["custom-song"],
+  content_name: "Custom Song",
+  content_type: "product",
+  contents: [{ content_id: "custom-song", content_name: "Custom Song", quantity: 1, price: SONG_PRICE }],
+};
+
 export default function TikTokPixel() {
   return (
     <Script
@@ -46,28 +53,21 @@ export function trackTikTokEvent(event: string, params?: Record<string, unknown>
   getTtq()?.track(event, params);
 }
 
-// Identify user with email for better attribution (TikTok hashes it)
 export function identifyTikTokUser(email: string) {
   getTtq()?.identify({ email });
 }
 
-// ViewContent — user lands on page and sees the product (fired on load)
 export function trackTikTokViewContent() {
   trackTikTokEvent("ViewContent", {
-    content_id: "custom-song",
-    content_name: "Custom Song",
-    content_type: "product",
+    ...PRODUCT,
     value: SONG_PRICE,
     currency: "USD",
   });
 }
 
-// AddToCart — user completes step 1 (selected a style = expressed intent)
 export function trackTikTokAddToCart() {
   trackTikTokEvent("AddToCart", {
-    content_id: "custom-song",
-    content_name: "Custom Song",
-    content_type: "product",
+    ...PRODUCT,
     value: SONG_PRICE,
     currency: "USD",
   });
@@ -75,22 +75,17 @@ export function trackTikTokAddToCart() {
 
 export function trackTikTokInitiateCheckout(value: number, currency = "USD") {
   trackTikTokEvent("InitiateCheckout", {
+    ...PRODUCT,
     value,
     currency,
-    content_id: "custom-song",
-    content_name: "Custom Song",
-    content_type: "product",
   });
 }
 
-// Purchase (standard name) + CompletePayment (TikTok-specific) both fired for full coverage
 export function trackTikTokPurchase(value: number, currency = "USD", orderId?: string) {
   const params = {
+    ...PRODUCT,
     value,
     currency,
-    content_id: "custom-song",
-    content_name: "Custom Song",
-    content_type: "product",
     order_id: orderId,
   };
   trackTikTokEvent("Purchase", params);
