@@ -25,7 +25,7 @@ export default function TikTokPixel() {
             };
             ttq.load('${PIXEL_ID}');
             ttq.page();
-            ttq.track('ViewContent', { content_name: 'Custom Song', content_type: 'product', value: ${SONG_PRICE}, currency: 'USD' });
+            ttq.track('ViewContent', { content_id: 'custom-song', content_name: 'Custom Song', content_type: 'product', value: ${SONG_PRICE}, currency: 'USD' });
           }(window,document,'ttq');
         `,
       }}
@@ -55,6 +55,7 @@ export function identifyTikTokUser(email: string) {
 // ViewContent — user lands on page and sees the product (fired on load)
 export function trackTikTokViewContent() {
   trackTikTokEvent("ViewContent", {
+    content_id: "custom-song",
     content_name: "Custom Song",
     content_type: "product",
     value: SONG_PRICE,
@@ -65,6 +66,7 @@ export function trackTikTokViewContent() {
 // AddToCart — user completes step 1 (selected a style = expressed intent)
 export function trackTikTokAddToCart() {
   trackTikTokEvent("AddToCart", {
+    content_id: "custom-song",
     content_name: "Custom Song",
     content_type: "product",
     value: SONG_PRICE,
@@ -76,6 +78,7 @@ export function trackTikTokInitiateCheckout(value: number, currency = "USD") {
   trackTikTokEvent("InitiateCheckout", {
     value,
     currency,
+    content_id: "custom-song",
     content_name: "Custom Song",
     content_type: "product",
   });
@@ -86,6 +89,7 @@ export function trackTikTokPurchase(value: number, currency = "USD", orderId?: s
   const params = {
     value,
     currency,
+    content_id: "custom-song",
     content_name: "Custom Song",
     content_type: "product",
     order_id: orderId,
