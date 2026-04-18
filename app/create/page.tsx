@@ -14,6 +14,7 @@ import {
   VOCAL_PREFERENCES,
   RELATIONSHIPS,
   OCCASIONS,
+  SONG_PRICE,
 } from "@/lib/types";
 import { trackInitiateCheckout } from "@/components/MetaPixel";
 
@@ -127,7 +128,7 @@ export default function CreatePage() {
 
     if (step === 5) {
       // Moving to checkout - fire InitiateCheckout pixel event + fetch client secret
-      trackInitiateCheckout(19.99);
+      trackInitiateCheckout(SONG_PRICE);
       await fetchClientSecret();
     }
 
@@ -153,7 +154,7 @@ export default function CreatePage() {
           <div className="max-w-2xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-sm">
             <div className="flex items-center gap-2">
               <span className="bg-purple-100 text-[#7C3AED] font-bold px-3 py-1 rounded-full text-xs">
-                Limited Time Offer: $19.99 USD
+                Limited Time Offer: ${SONG_PRICE} USD
               </span>
               <span className="text-gray-400 line-through text-xs">(Regular price $99.99 USD)</span>
             </div>

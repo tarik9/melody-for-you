@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { SONG_PRICE } from "@/lib/types";
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID || "D7HB6EJC77U8DEPHGQS0";
 
@@ -24,7 +25,7 @@ export default function TikTokPixel() {
             };
             ttq.load('${PIXEL_ID}');
             ttq.page();
-            ttq.track('ViewContent', { content_name: 'Custom Song', content_type: 'product', value: 19.99, currency: 'USD' });
+            ttq.track('ViewContent', { content_name: 'Custom Song', content_type: 'product', value: ${SONG_PRICE}, currency: 'USD' });
           }(window,document,'ttq');
         `,
       }}
@@ -56,7 +57,7 @@ export function trackTikTokViewContent() {
   trackTikTokEvent("ViewContent", {
     content_name: "Custom Song",
     content_type: "product",
-    value: 19.99,
+    value: SONG_PRICE,
     currency: "USD",
   });
 }
@@ -66,7 +67,7 @@ export function trackTikTokAddToCart() {
   trackTikTokEvent("AddToCart", {
     content_name: "Custom Song",
     content_type: "product",
-    value: 19.99,
+    value: SONG_PRICE,
     currency: "USD",
   });
 }

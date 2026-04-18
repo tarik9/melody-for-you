@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { OrderData } from "@/lib/types";
+import { OrderData, SONG_PRICE } from "@/lib/types";
 
 interface CheckoutStepProps {
   orderData: OrderData;
@@ -82,7 +82,7 @@ export default function CheckoutStep({ orderData, clientSecret, onBack }: Checko
             </div>
             <div className="border-t border-gray-200 pt-2 mt-2 flex justify-between">
               <span className="font-bold text-[#7C3AED]">Total</span>
-              <span className="font-bold text-[#7C3AED] text-lg">$19.99 USD</span>
+              <span className="font-bold text-[#7C3AED] text-lg">${SONG_PRICE} USD</span>
             </div>
           </div>
         </div>
@@ -170,7 +170,7 @@ export default function CheckoutStep({ orderData, clientSecret, onBack }: Checko
                 <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="1.5" />
                 <path d="M2 8h16" stroke="currentColor" strokeWidth="1.5" />
               </svg>
-              Pay $19.99 USD
+              Pay ${SONG_PRICE} USD
             </>
           )}
         </button>

@@ -1,5 +1,7 @@
 "use client";
 
+import { SONG_PRICE } from "@/lib/types";
+
 export default function PricingCTA() {
   const scrollToForm = () => {
     const el = document.getElementById("order-form");
@@ -11,7 +13,7 @@ export default function PricingCTA() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
         <div className="inline-flex items-center gap-2 bg-white border border-purple-200 text-[#7C3AED] font-semibold px-5 py-2 rounded-full text-sm shadow-sm mb-4">
           <span className="w-2 h-2 bg-[#7C3AED] rounded-full animate-pulse" />
-          Limited Time Offer: $19.99 USD
+          Limited Time Offer: ${SONG_PRICE} USD
         </div>
 
         <p className="text-gray-400 text-sm mb-6">
@@ -37,7 +39,7 @@ export default function PricingCTA() {
           onClick={scrollToForm}
           className="bg-[#D97706] hover:bg-[#B45309] text-white font-bold px-12 py-4 rounded-full text-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-200 inline-block"
         >
-          Create Your Song — $19.99
+          Create Your Song — ${SONG_PRICE}
         </button>
 
         <p className="text-gray-400 text-xs mt-4">

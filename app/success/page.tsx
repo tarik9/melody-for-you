@@ -4,6 +4,7 @@ import { useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Header from "@/components/Header";
+import { SONG_PRICE } from "@/lib/types";
 import { trackPurchase } from "@/components/MetaPixel";
 import { trackRedditPurchase } from "@/components/RedditPixel";
 import { trackTikTokPurchase } from "@/components/TikTokPixel";
@@ -18,9 +19,9 @@ function SuccessContent() {
 
   useEffect(() => {
     // Fire client-side purchase pixel events
-    trackPurchase(19.99, "USD");
-    trackRedditPurchase(19.99, "USD", email, paymentIntentId);
-    trackTikTokPurchase(19.99, "USD", paymentIntentId);
+    trackPurchase(SONG_PRICE, "USD");
+    trackRedditPurchase(SONG_PRICE, "USD", email, paymentIntentId);
+    trackTikTokPurchase(SONG_PRICE, "USD", paymentIntentId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

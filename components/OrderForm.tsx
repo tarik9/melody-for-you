@@ -14,6 +14,7 @@ import {
   VOCAL_PREFERENCES,
   RELATIONSHIPS,
   OCCASIONS,
+  SONG_PRICE,
 } from "@/lib/types";
 import { trackInitiateCheckout } from "@/components/MetaPixel";
 import { trackRedditLead } from "@/components/RedditPixel";
@@ -153,10 +154,10 @@ export default function OrderForm() {
       trackTikTokAddToCart();
     }
     if (step === 5) {
-      trackInitiateCheckout(19.99);
+      trackInitiateCheckout(SONG_PRICE);
       trackRedditLead(order.email);
       identifyTikTokUser(order.email);
-      trackTikTokInitiateCheckout(19.99);
+      trackTikTokInitiateCheckout(SONG_PRICE);
       getStripePromise(); // pre-warm Stripe.js while user fills email
       // Run both in parallel to save time
       await Promise.all([saveOrderToSheet(), fetchClientSecret()]);
@@ -181,7 +182,7 @@ export default function OrderForm() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-5 py-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 text-sm">
           <div className="flex items-center gap-2 flex-wrap justify-center">
             <span className="bg-purple-100 text-[#7C3AED] font-bold px-3 py-1 rounded-full text-xs">
-              Limited Time Offer: $19.99 USD
+              Limited Time Offer: ${SONG_PRICE} USD
             </span>
             <span className="text-gray-400 line-through text-xs">Regular price $99.99 USD</span>
           </div>
