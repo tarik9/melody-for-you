@@ -38,7 +38,7 @@ export default function TikTokPixel() {
 }
 
 type Ttq = {
-  track: (event: string, params?: Record<string, unknown>) => void;
+  track: (event: string, params?: Record<string, unknown>, options?: { event_id?: string }) => void;
   identify: (params: Record<string, unknown>) => void;
 };
 
@@ -47,8 +47,8 @@ function getTtq(): Ttq | undefined {
   return (window as unknown as { ttq?: Ttq }).ttq;
 }
 
-export function trackTikTokEvent(event: string, params?: Record<string, unknown>) {
-  getTtq()?.track(event, params);
+export function trackTikTokEvent(event: string, params?: Record<string, unknown>, options?: { event_id?: string }) {
+  getTtq()?.track(event, params, options);
 }
 
 export function identifyTikTokUser(email: string) {
@@ -80,12 +80,10 @@ export function trackTikTokInitiateCheckout(value: number, currency = "USD") {
 }
 
 export function trackTikTokPurchase(value: number, currency = "USD", orderId?: string) {
-  const params = {
+  trackTikTokEvent("Purchase", {
     ...PRODUCT,
     value,
     currency,
     order_id: orderId,
-  };
-  trackTikTokEvent("Purchase", params);
-  trackTikTokEvent("CompletePayment", params);
+  }, { event_id: orderId });
 }
