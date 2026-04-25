@@ -38,30 +38,14 @@ export async function POST(req: NextRequest) {
       email: meta.email || paymentIntent.receipt_email || "",
     };
 
-    // Get client info from the charge (if available)
-    const charges = paymentIntent.latest_charge;
-    let clientIp: string | undefined;
-    let userAgent: string | undefined;
-
-    if (typeof charges === "string") {
-      try {
-        const charge = await stripe.charges.retrieve(charges);
-        clientIp = charge.billing_details?.address?.postal_code ? undefined : undefined;
-      } catch {}
-    }
-
-    // 1. Append to Google Sheets
     await appendOrderToSheet(orderData, paymentIntent.id, paymentIntent.amount);
 
-    // 2. Send server-side Purchase events (Meta CAPI + TikTok Events API)
     await Promise.all([
       sendPurchaseEvent({
         email: orderData.email,
         value: paymentIntent.amount / 100,
         currency: paymentIntent.currency.toUpperCase(),
         orderId: paymentIntent.id,
-        clientIp,
-        userAgent,
         eventSourceUrl: `${process.env.NEXT_PUBLIC_APP_URL}/create`,
       }),
       sendTikTokPurchaseEvent({
@@ -69,13 +53,49 @@ export async function POST(req: NextRequest) {
         value: paymentIntent.amount / 100,
         currency: paymentIntent.currency.toUpperCase(),
         orderId: paymentIntent.id,
-        clientIp,
-        userAgent,
         eventSourceUrl: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
       }),
     ]);
 
-    console.log(`Order processed successfully: ${paymentIntent.id}`);
+    console.log(`Order processed (form): ${paymentIntent.id}`);
+  }
+
+  // Handle Stripe Payment Link purchases (checkout.session.completed)
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    if (session.payment_status !== "paid") return NextResponse.json({ received: true });
+
+    const email = session.customer_details?.email || "";
+    const paymentIntentId = typeof session.payment_intent === "string" ? session.payment_intent : "";
+    const amount = session.amount_total || 0;
+    const currency = (session.currency || "usd").toUpperCase();
+
+    const orderData: OrderData = {
+      style: "", vocalPreference: "", recipientName: "",
+      relationship: "", occasion: "Payment Link", story: "",
+      specificLyrics: "", email,
+    };
+
+    await appendOrderToSheet(orderData, paymentIntentId, amount);
+
+    await Promise.all([
+      sendPurchaseEvent({
+        email,
+        value: amount / 100,
+        currency,
+        orderId: paymentIntentId,
+        eventSourceUrl: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
+      }),
+      sendTikTokPurchaseEvent({
+        email,
+        value: amount / 100,
+        currency,
+        orderId: paymentIntentId,
+        eventSourceUrl: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
+      }),
+    ]);
+
+    console.log(`Order processed (payment link): ${paymentIntentId}`);
   }
 
   return NextResponse.json({ received: true });
