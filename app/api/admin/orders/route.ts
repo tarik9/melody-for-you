@@ -7,6 +7,9 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const orders = await listOrders();
+  const since = req.nextUrl.searchParams.get("since") || undefined;
+  const until = req.nextUrl.searchParams.get("until") || undefined;
+
+  const orders = await listOrders({ since, until });
   return NextResponse.json({ orders });
 }

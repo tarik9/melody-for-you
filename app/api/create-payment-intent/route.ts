@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
         story: orderData.story.slice(0, 490),
         specific_lyrics: (orderData.specificLyrics || "").slice(0, 490),
         email: orderData.email,
+        country: req.headers.get("x-vercel-ip-country") || "",
       },
       description: `Custom Song – ${orderData.occasion} for ${orderData.recipientName}`,
     });

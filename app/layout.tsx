@@ -3,6 +3,7 @@ import "./globals.css";
 import MetaPixel from "@/components/MetaPixel";
 import RedditPixel from "@/components/RedditPixel";
 import TikTokPixel from "@/components/TikTokPixel";
+import VisitorTracker from "@/components/VisitorTracker";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://melodyforyou.store"),
@@ -29,6 +30,7 @@ export default function RootLayout({
         <MetaPixel />
         <RedditPixel />
         <TikTokPixel />
+        <VisitorTracker />
         {children}
       </body>
     </html>

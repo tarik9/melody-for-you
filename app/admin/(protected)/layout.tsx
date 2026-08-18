@@ -7,6 +7,16 @@ import { getAdminToken, clearAdminToken } from "@/lib/adminClient";
 
 const NAV = [
   {
+    href: "/admin/live",
+    label: "Live",
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="3" />
+        <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+      </>
+    ),
+  },
+  {
     href: "/admin",
     label: "Dashboard",
     icon: (
@@ -28,12 +38,22 @@ const NAV = [
     ),
   },
   {
-    href: "/admin/live",
-    label: "Live",
+    href: "/admin/emails",
+    label: "Emails",
     icon: (
       <>
+        <path d="M4 5h16v14H4V5z" />
+        <path d="M4 6l8 7 8-7" />
+      </>
+    ),
+  },
+  {
+    href: "/admin/visitors",
+    label: "Visitors",
+    icon: (
+      <>
+        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
         <circle cx="12" cy="12" r="3" />
-        <path d="M12 2v3M12 19v3M2 12h3M19 12h3" />
       </>
     ),
   },

@@ -3,6 +3,7 @@
 import { Fragment, useMemo, useState } from "react";
 import type { AdminOrderRow } from "@/lib/adminData";
 import StatusBadge from "./StatusBadge";
+import { downloadCsv } from "@/lib/exportCsv";
 
 export default function OrdersTable({
   rows,
@@ -33,6 +34,23 @@ export default function OrdersTable({
     });
   }, [rows, search, occasionFilter]);
 
+  function handleExport() {
+    downloadCsv(
+      "orders.csv",
+      ["Email", "Amount", "Currency", "Status", "Source", "Occasion", "Recipient", "Date"],
+      filtered.map((r) => [
+        r.email,
+        r.amount.toFixed(2),
+        r.currency,
+        r.refunded ? "refunded" : r.status,
+        r.source,
+        r.occasion || "",
+        r.recipientName || "",
+        new Date(r.date).toLocaleString(),
+      ])
+    );
+  }
+
   return (
     <div>
       {showFilters && (
@@ -55,6 +73,12 @@ export default function OrdersTable({
               </option>
             ))}
           </select>
+          <button
+            onClick={handleExport}
+            className="px-4 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors whitespace-nowrap"
+          >
+            Export CSV
+          </button>
         </div>
       )}
 
@@ -82,7 +106,7 @@ export default function OrdersTable({
                       ${r.amount.toFixed(2)} {r.currency}
                     </td>
                     <td className="px-4 py-3">
-                      <StatusBadge status={r.status} />
+                      <StatusBadge status={r.refunded ? "refunded" : r.status} />
                     </td>
                     <td className="px-4 py-3 text-gray-500">{r.source}</td>
                     <td className="px-4 py-3 text-gray-500">

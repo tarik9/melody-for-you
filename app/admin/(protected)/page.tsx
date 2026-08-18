@@ -5,22 +5,35 @@ import { adminFetch } from "@/lib/adminClient";
 import StatCard from "@/components/admin/StatCard";
 import RevenueChart from "@/components/admin/RevenueChart";
 import TopStylesBars from "@/components/admin/TopStylesBars";
+import DateRangeTabs from "@/components/admin/DateRangeTabs";
+import { rangeToQuery, DateRangeValue } from "@/lib/adminRanges";
 import type { AdminStats } from "@/lib/adminData";
 
+interface DashboardStats extends AdminStats {
+  uniqueVisitors: number;
+  liveNow: number;
+  visitorsTracked: boolean;
+}
+
 export default function AdminDashboardPage() {
-  const [stats, setStats] = useState<AdminStats | null>(null);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [range, setRange] = useState<DateRangeValue>({});
 
   useEffect(() => {
-    adminFetch("/api/admin/stats")
+    setLoading(true);
+    adminFetch(`/api/admin/stats${rangeToQuery(range)}`)
       .then((res) => res.json())
       .then((data) => setStats(data))
       .finally(() => setLoading(false));
-  }, []);
+  }, [range]);
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">Dashboard</h1>
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-1">
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <DateRangeTabs onChange={setRange} />
+      </div>
       <p className="text-gray-400 text-sm mb-6">Overview of orders, revenue, and leads.</p>
 
       {loading || !stats ? (
@@ -29,15 +42,29 @@ export default function AdminDashboardPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <StatCard label="Total Orders" value={String(stats.totalOrders)} />
-            <StatCard label="Total Revenue" value={`$${stats.totalRevenue.toFixed(2)}`} />
-            <StatCard label="Leads (Abandoned Checkout)" value={String(stats.totalLeads)} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            <StatCard label="Revenue" value={`$${stats.totalRevenue.toFixed(2)}`} />
+            <StatCard label="Orders" value={String(stats.totalOrders)} />
             <StatCard
-              label="Conversion Rate"
-              value={`${stats.conversionRate.toFixed(1)}%`}
-              hint="Orders / (Orders + Leads)"
+              label="Email Captures"
+              value={String(stats.emailCaptures)}
+              hint={`${stats.conversionRate.toFixed(1)}% conv. rate`}
             />
+            <StatCard
+              label="Unique Visitors"
+              value={stats.visitorsTracked ? String(stats.uniqueVisitors) : "—"}
+              hint={stats.visitorsTracked ? `${stats.liveNow} live now` : "tracking not configured"}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <StatCard
+              label="Lead Conversion"
+              value={`${stats.conversionRate.toFixed(1)}%`}
+              hint="visitors → order"
+            />
+            <StatCard label="Leads (Abandoned Checkout)" value={String(stats.totalLeads)} />
+            <StatCard label="Refunded" value={String(stats.totalRefunded)} />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

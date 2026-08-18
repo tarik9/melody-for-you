@@ -5,6 +5,7 @@ const STYLES: Record<string, string> = {
   requires_action: "bg-amber-50 text-amber-700",
   processing: "bg-blue-50 text-blue-700",
   canceled: "bg-gray-100 text-gray-500",
+  refunded: "bg-red-50 text-red-600",
 };
 
 const LABELS: Record<string, string> = {
@@ -14,6 +15,7 @@ const LABELS: Record<string, string> = {
   processing: "Processing",
   canceled: "Canceled",
   succeeded: "Paid",
+  refunded: "Refunded",
 };
 
 export default function StatusBadge({ status }: { status: string }) {
