@@ -63,6 +63,7 @@ export default function AdminProtectedLayout({ children }: { children: React.Rea
   const router = useRouter();
   const pathname = usePathname();
   const [ready, setReady] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     if (!getAdminToken()) {
@@ -71,6 +72,10 @@ export default function AdminProtectedLayout({ children }: { children: React.Rea
       setReady(true);
     }
   }, [router]);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
 
   if (!ready) {
     return (
@@ -81,15 +86,52 @@ export default function AdminProtectedLayout({ children }: { children: React.Rea
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] flex">
-      <aside className="w-60 bg-white border-r border-gray-100 flex flex-col shrink-0">
-        <div className="h-14 flex items-center px-5 border-b border-gray-100">
+    <div className="min-h-screen bg-[#F9FAFB] sm:flex overflow-x-hidden">
+      {/* Mobile top bar */}
+      <div className="sm:hidden h-14 flex items-center justify-between px-4 border-b border-gray-100 bg-white sticky top-0 z-30">
+        <span className="font-bold text-gray-900 text-sm tracking-tight">
+          MelodyForYou <span className="text-[#7C3AED]">Admin</span>
+        </span>
+        <button
+          onClick={() => setMobileOpen(true)}
+          aria-label="Open menu"
+          className="p-2 -mr-2 text-gray-500"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-5 h-5">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile backdrop */}
+      {mobileOpen && (
+        <div
+          className="sm:hidden fixed inset-0 bg-black/30 z-40"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      <aside
+        className={`fixed sm:static inset-y-0 left-0 z-50 w-60 bg-white border-r border-gray-100 flex flex-col shrink-0 transform transition-transform duration-200 ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        } sm:translate-x-0`}
+      >
+        <div className="h-14 flex items-center justify-between px-5 border-b border-gray-100">
           <span className="font-bold text-gray-900 text-sm tracking-tight">
             MelodyForYou <span className="text-[#7C3AED]">Admin</span>
           </span>
+          <button
+            onClick={() => setMobileOpen(false)}
+            aria-label="Close menu"
+            className="sm:hidden p-1 text-gray-400"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="w-5 h-5">
+              <path d="M6 6l12 12M18 6L6 18" />
+            </svg>
+          </button>
         </div>
 
-        <nav className="flex-1 py-4 px-3 space-y-1">
+        <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
           {NAV.map((item) => {
             const active = pathname === item.href;
             return (
@@ -132,8 +174,8 @@ export default function AdminProtectedLayout({ children }: { children: React.Rea
         </div>
       </aside>
 
-      <div className="flex-1 min-w-0">
-        <main className="p-6 sm:p-8 max-w-7xl mx-auto">{children}</main>
+      <div className="flex-1 min-w-0 w-full">
+        <main className="p-4 sm:p-8 max-w-7xl mx-auto">{children}</main>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import DateRangeTabs from "@/components/admin/DateRangeTabs";
 import StatCard from "@/components/admin/StatCard";
 import { rangeToQuery, DateRangeValue } from "@/lib/adminRanges";
 import { downloadCsv } from "@/lib/exportCsv";
+import { countryName } from "@/lib/countryName";
 
 interface EmailRow {
   email: string;
@@ -40,7 +41,7 @@ export default function AdminEmailsPage() {
     downloadCsv(
       "emails.csv",
       ["Email", "Country", "Status", "Date"],
-      filtered.map((e) => [e.email, e.country || "", e.status, new Date(e.date).toLocaleString()])
+      filtered.map((e) => [e.email, countryName(e.country), e.status, new Date(e.date).toLocaleString()])
     );
   }
 
@@ -104,7 +105,7 @@ export default function AdminEmailsPage() {
                   {filtered.map((e) => (
                     <tr key={e.email} className="border-b border-gray-50 hover:bg-gray-50">
                       <td className="px-4 py-3 text-gray-900">{e.email}</td>
-                      <td className="px-4 py-3 text-gray-500">{e.country || "—"}</td>
+                      <td className="px-4 py-3 text-gray-500">{countryName(e.country)}</td>
                       <td className="px-4 py-3">
                         <span
                           className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${

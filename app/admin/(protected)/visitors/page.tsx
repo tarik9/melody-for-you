@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { adminFetch } from "@/lib/adminClient";
 import DateRangeTabs from "@/components/admin/DateRangeTabs";
 import { rangeToQuery, DateRangeValue } from "@/lib/adminRanges";
+import { countryName } from "@/lib/countryName";
 
 interface VisitorSession {
   id: string;
@@ -45,6 +46,7 @@ export default function AdminVisitorsPage() {
     return sessions.filter(
       (s) =>
         s.country.toLowerCase().includes(q) ||
+        countryName(s.country).toLowerCase().includes(q) ||
         s.referrer.toLowerCase().includes(q) ||
         s.utmSource.toLowerCase().includes(q) ||
         s.utmCampaign.toLowerCase().includes(q)
@@ -120,7 +122,7 @@ export default function AdminVisitorsPage() {
                       <td className="px-4 py-3 text-gray-500 whitespace-nowrap">
                         {new Date(s.time).toLocaleString()}
                       </td>
-                      <td className="px-4 py-3 text-gray-900">{s.country || "—"}</td>
+                      <td className="px-4 py-3 text-gray-900">{countryName(s.country)}</td>
                       <td className="px-4 py-3 text-gray-500 font-mono text-xs">{s.path}</td>
                       <td className="px-4 py-3 text-gray-500">{s.referrer || "—"}</td>
                       <td className="px-4 py-3 text-gray-500">{s.utmSource || "—"}</td>
