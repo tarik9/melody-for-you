@@ -28,6 +28,7 @@ export const OCCASIONS = [
   "Graduation",
   "Mother's Day",
   "Father's Day",
+  "Grandparents' Day",
   "Christmas",
   "Other",
 ];
