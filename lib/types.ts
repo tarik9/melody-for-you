@@ -16,7 +16,7 @@ export interface OrderData {
 
 export const MUSICAL_STYLES = ["Pop", "Ballad", "Country", "Rock", "Jazz", "Rap", "R&B", "Folk"];
 export const VOCAL_PREFERENCES = ["Male", "Female", "Duet"];
-export const RELATIONSHIPS = ["Partner", "Parent", "Child", "Sibling", "Friend", "Myself", "Other"];
+export const RELATIONSHIPS = ["Partner", "Parent", "Grandmother", "Grandfather", "Child", "Sibling", "Friend", "Myself", "Other"];
 export const OCCASIONS = [
   "Birthday",
   "Anniversary",
